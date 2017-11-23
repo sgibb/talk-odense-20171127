@@ -81,6 +81,7 @@ ph97 <- as.logical(rowSums(abs(deltamz - ph["phosphoNL"]) < 0.5))
 sum(ph97)
 
 #' MS level vs rtime
+#+ mslevelvsrt, fig.width=12, fig.height=12
 library("RColorBrewer")
 col <- paste0(brewer.pal(5, "Set1"), "80")
 plot(rtime(ms) / 60, jitter(msLevel(ms), factor=2),
