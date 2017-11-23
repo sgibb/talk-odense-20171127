@@ -79,3 +79,16 @@ sum(ph80)
 #' How many phosphoNL?
 ph97 <- as.logical(rowSums(abs(deltamz - ph["phosphoNL"]) < 0.5))
 sum(ph97)
+
+#' MS level vs rtime
+library("RColorBrewer")
+col <- paste0(brewer.pal(5, "Set1"), "80")
+plot(rtime(ms) / 60, jitter(msLevel(ms), factor=2),
+     col=col[msLevel(ms)], pch=20,
+     ylim=c(5, 0.5),
+     main="MS level vs rtime", xlab="rt", yaxt="n", ylab="")
+points(rtime(ms2)[ph80] / 60, jitter(rep(4, sum(ph80))), col=col[4], pch=20)
+points(rtime(ms2)[ph97] / 60, jitter(rep(5, sum(ph97))), col=col[5], pch=20)
+legend("top", legend=c(paste0("MS", 1:3), "Ph80", "Ph97"),
+       col=col, pch=20, bty="n", horiz=TRUE)
+axis(2, at=-(1:5), labels=c(paste0("MS", 1:3), "Ph80", "Ph97"))
