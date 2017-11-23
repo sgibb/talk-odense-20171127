@@ -36,7 +36,8 @@ plot(rtime(ms1) / 60, fData(ms1)$basePeakIntensity,
 ms2pm <- round(rtime(ms2) / 60)
 
 hist(ms2pm)
-plot(table(ms2pm), type="l")
+plot(table(ms2pm), type="l",
+     main="MS2 per min", xlab="rt", ylab="number of MS2 spectra")
 
 #' # NL trigger
 
