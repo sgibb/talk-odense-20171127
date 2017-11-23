@@ -21,19 +21,19 @@ ms2 <- filterMsLevel(ms, 2)
 ms3 <- filterMsLevel(ms, 3)
 
 #' # TIC plot
-plot(rtime(ms1)/60, tic(ms1),
+plot(rtime(ms1) / 60, tic(ms1),
      type="l", col="red",
      xlim=c(40, 120),
      main="TIC", xlab="rt", ylab="intenisty")
 
 #' # BPI plot
-plot(rtime(ms1)/60, fData(ms1)$basePeakIntensity,
+plot(rtime(ms1) / 60, fData(ms1)$basePeakIntensity,
      type="l", col="blue",
      xlim=c(40, 120),
      main="BPI", xlab="rt", ylab="intensity")
 
 #' # MS/MS per minute
-ms2pm <- round(rtime(ms2))
+ms2pm <- round(rtime(ms2) / 60)
 
 hist(ms2pm)
 plot(table(ms2pm), type="l")
