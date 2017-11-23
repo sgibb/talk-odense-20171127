@@ -32,6 +32,22 @@ plot(rtime(ms1) / 60, fData(ms1)$basePeakIntensity,
      xlim=c(40, 120),
      main="BPI", xlab="rt", ylab="intensity")
 
+#' # Ion Injection Time plot
+hist(fData(ms1)$injectionTime, main="Ion Injection Time MS1", xlim=c(0, 0.055))
+hist(fData(ms2)$injectionTime, main="Ion Injection Time MS2", xlim=c(0, 0.055))
+hist(fData(ms3)$injectionTime, main="Ion Injection Time MS3", xlim=c(0, 0.055))
+
+plot(rtime(ms1) / 60, fData(ms1)$injectionTime,
+     type="l",
+     xlim=c(40, 120),
+     main="Ion Injection Time MS1", xlab="rt", ylab="intensity")
+plot(rtime(ms2) / 60, fData(ms2)$injectionTime,
+     xlim=c(40, 120),
+     main="Ion Injection Time MS2", xlab="rt", ylab="intensity")
+plot(rtime(ms3) / 60, fData(ms3)$injectionTime,
+     xlim=c(40, 120),
+     main="Ion Injection Time MS3", xlab="rt", ylab="intensity")
+
 #' # MS/MS per minute
 ms2pm <- round(rtime(ms2) / 60)
 
