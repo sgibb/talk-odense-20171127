@@ -1,6 +1,6 @@
 #+ setup, include=FALSE
 library("knitr")
-opts_chunk$set(cache=TRUE, cache.path=".cache/", fig.width=12)
+opts_chunk$set(cache=TRUE, cache.path=".cache/neutral-loss/", fig.width=12)
 
 #' # MSnbase example
 #' Setup
