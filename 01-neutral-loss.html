@@ -207,6 +207,11 @@ hr {
 
 <pre><code class="r">library(&quot;MSnbase&quot;)
 
+if (packageVersion(&quot;mzR&quot;) &lt; &quot;2.13.1&quot;) {
+    stop(&quot;For this example you need at least mzR 2.13.1 &quot;,
+         &quot;(because of the filter string feature).&quot;)
+}
+
 # create some colors
 library(&quot;RColorBrewer&quot;)
 col &lt;- paste0(brewer.pal(5, &quot;Set1&quot;))

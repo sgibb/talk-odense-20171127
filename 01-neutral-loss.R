@@ -6,6 +6,11 @@ opts_chunk$set(cache=TRUE, cache.path=".cache/neutral-loss/", fig.width=12)
 #' Setup
 library("MSnbase")
 
+if (packageVersion("mzR") < "2.13.1") {
+    stop("For this example you need at least mzR 2.13.1 ",
+         "(because of the filter string feature).")
+}
+
 # create some colors
 library("RColorBrewer")
 col <- paste0(brewer.pal(5, "Set1"))
