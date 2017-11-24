@@ -87,7 +87,7 @@ plot(table(ms3pm), type="l", col=col["MS3"],
 
 #' # NL trigger
 
-#' own top5 function
+#' Own top5 function
 .topN <- function(x, n=5) {
     order(intensity(x), decreasing=TRUE)[1:n]
 }
@@ -95,7 +95,7 @@ plot(table(ms3pm), type="l", col=col["MS3"],
     mz(x)[.topN(x, n)]
 }
 
-#' top5 for each spectrum
+#' Top5 for each spectrum
 top5mz <- spectrapply(ms2, .topMz)
 # convert to matrix
 top5mz <- do.call(rbind, top5mz)
@@ -126,7 +126,7 @@ points(rtime(ms2)[nl97] / 60, jitter(rep(5, sum(nl97))), col=cola[5], pch=20)
 legend("top", legend=names(col), col=cola, pch=20, bty="n", horiz=TRUE)
 axis(2, at=-(1:5), labels=names(col))
 
-#' spectra vs rtime
+#' Spectra vs rtime
 #+ msnvsrt, fig.width=12
 plot(NA, col=col["MS1"],
      ylim=c(0.1, 1200), xlim=c(0, 120),
@@ -153,35 +153,34 @@ nldf <- merge(ms3df, ms2df,
               sort=FALSE, by="pcCid", suffixes=c(".ms3", ".ms2"))
 knitr::kable(head(nldf))
 
-#' calc scan difference
+#' Calc scan difference
 nldf$delta <- nldf$scanId.ms3 - nldf$scanId.ms2
 knitr::kable(head(nldf))
 
-#' just keep entries where MS3 was acquired after MS2
+#' Just keep entries where MS3 was acquired after MS2
 nldf <- nldf[nldf$delta > 0,]
 
-#' sort by scanId.ms3 followed by delta and remove duplicated
+#' Sort by scanId.ms3 followed by delta and remove duplicated
 nldf <- nldf[order(nldf$scanId.ms3, nldf$delta),]
-knitr::kable(head(nldf))
 
 nldf <- nldf[!duplicated(nldf$scanId.ms3),]
 knitr::kable(head(nldf))
 
-#' compare nl trigger
+#' Compare nl trigger
 ms2idNL <- list(own=sort(scanIndex(ms2)[nl80 | nl97]),
                 thermo=nldf$scanId.ms2)
 
-#' plot sets
+#' Plot sets
 library("UpSetR")
 upset(fromList(ms2idNL), order.by="freq")
 
-#' find unique ones
+#' Find unique ones
 com <- intersect(ms2idNL$own, ms2idNL$thermo)
 uOwn <- setdiff(ms2idNL$own, ms2idNL$thermo)
 uThermo <- setdiff(ms2idNL$thermo, ms2idNL$own)
 
 
-#' plotms2 function
+#' plotMs2 function
 plotMs2 <- function(s, xlim=range(mz(s)), ylim=range(intensity(s)), tol=0.5, topn=5) {
     plot(NA, xlim=xlim, ylim=ylim, xlab="m/z", ylab="intensity")
     lines(mz(s), intensity(s), type="h", col=col["MS2"])
@@ -212,17 +211,17 @@ plotMs2 <- function(s, xlim=range(mz(s)), ylim=range(intensity(s)), tol=0.5, top
     legend("topleft", legend=lg, bty="n")
 }
 
-#' plot some common ones
+#' Plot some common ones
 plotMs2(ms[[com[1]]])
 plotMs2(ms[[com[2]]])
 
-#' plot some unique ones
+#' Plot some unique ones
 plotMs2(ms[[uOwn[1]]])
 plotMs2(ms[[uOwn[2]]])
 plotMs2(ms[[uThermo[1]]])
 plotMs2(ms[[uThermo[2]]])
 
-#' minimal differences
+#' Minimal differences
 i <- match(com, scanIndex(ms2))
 minDiffCom <- apply(deltamz[i,], 1, function(r)min(abs(r - rep(nl, each=length(r)))))
 i <- match(uOwn, scanIndex(ms2))
