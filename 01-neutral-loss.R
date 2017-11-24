@@ -148,7 +148,7 @@ nldf <- merge(ms3df, ms2df,
               sort=FALSE, by="pcCid", suffixes=c(".ms3", ".ms2"))
 knitr::kable(head(nldf))
 
-# calc scan difference
+#' calc scan difference
 nldf$delta <- nldf$scanId.ms3 - nldf$scanId.ms2
 knitr::kable(head(nldf))
 
@@ -176,7 +176,7 @@ uOwn <- setdiff(ms2idNL$own, ms2idNL$thermo)
 uThermo <- setdiff(ms2idNL$thermo, ms2idNL$own)
 
 
-#+ plotms2, include=FALSE
+#' plotms2 function
 plotMs2 <- function(s, xlim=range(mz(s)), ylim=range(intensity(s)), tol=0.5, topn=5) {
     plot(NA, xlim=xlim, ylim=ylim, xlab="m/z", ylab="intensity")
     lines(mz(s), intensity(s), type="h", col=col["MS2"])

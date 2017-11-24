@@ -9,8 +9,8 @@
 
 ### Files
 
-- [Example R file](01-neutral-loss.R);
-- [Output](https://rawgit.com/sgibb/talk-odense-20171127/master/01-neutral-loss.html)
+- [Example R file](01-neutral-loss.R).
+- [Output](https://rawgit.com/sgibb/talk-odense-20171127/master/01-neutral-loss.html).
 
 ## Working with sequences
 
@@ -19,5 +19,5 @@
 
 ### Files
 
-- [Example R file](02-sequences.R);
-- [Output](https://rawgit.com/sgibb/talk-odense-20171127/master/02-sequences.html)
+- [Example R file](02-sequences.R).
+- [Output](https://rawgit.com/sgibb/talk-odense-20171127/master/02-sequences.html).
