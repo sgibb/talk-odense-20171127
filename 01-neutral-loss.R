@@ -37,7 +37,7 @@ ms3 <- filterMsLevel(ms, 3)
 plot(rtime(ms1) / 60, tic(ms1),
      type="l", col="red",
      xlim=c(40, 120),
-     main="TIC", xlab="rt [min]", ylab="intenisty")
+     main="TIC", xlab="rt [min]", ylab="intensity")
 
 #' # BPI plot
 plot(rtime(ms1) / 60, fData(ms1)$basePeakIntensity,
@@ -56,13 +56,16 @@ hist(fData(ms3)$injectionTime,
 plot(rtime(ms1) / 60, fData(ms1)$injectionTime,
      type="l", col=col["MS1"],
      xlim=c(40, 120),
-     main="Ion Injection Time MS1", xlab="rt [min]", ylab="intensity")
+     main="Ion Injection Time MS1",
+     xlab="rt [min]", ylab="ion injection time [sec]")
 plot(rtime(ms2) / 60, fData(ms2)$injectionTime,
      xlim=c(40, 120), col=col["MS2"],
-     main="Ion Injection Time MS2", xlab="rt [min]", ylab="intensity")
+     main="Ion Injection Time MS2",
+     xlab="rt [min]", ylab="ion injection time [sec]")
 plot(rtime(ms3) / 60, fData(ms3)$injectionTime,
      xlim=c(40, 120), col=col["MS3"],
-     main="Ion Injection Time MS3", xlab="rt [min]", ylab="intensity")
+     main="Ion Injection Time MS3",
+     xlab="rt [min]", ylab="ion injection time [sec]")
 
 #' # MS1 per minute
 ms1pm <- round(rtime(ms1) / 60)
@@ -99,18 +102,17 @@ plot(table(ms3pm), type="l", col=col["MS3"],
 top5mz <- spectrapply(ms2, .topMz)
 # convert to matrix
 top5mz <- do.call(rbind, top5mz)
-#' get precursor mz
-precmz <- precursorMz(ms2)
 #' &Delta; mz
-deltamz <- precmz - top5mz
+deltamz <- precursorMz(ms2) - top5mz
 nl <- c(phosphate=80, phosphoNL=97.9763)
+tol <- 0.5 # tolerance in [Da]
 
 #' How many phosphates?
-nl80 <- as.logical(rowSums(abs(deltamz - nl["phosphate"]) < 0.5))
+nl80 <- as.logical(rowSums(abs(deltamz - nl["phosphate"]) <= tol))
 sum(nl80)
 
 #' How many phosphoNL?
-nl97 <- as.logical(rowSums(abs(deltamz - nl["phosphoNL"]) < 0.5))
+nl97 <- as.logical(rowSums(abs(deltamz - nl["phosphoNL"]) <= tol))
 sum(nl97)
 
 #' MS level vs rtime
@@ -128,8 +130,7 @@ axis(2, at=-(1:5), labels=names(col))
 
 #' Spectra vs rtime
 #+ msnvsrt, fig.width=12
-plot(NA, col=col["MS1"],
-     ylim=c(0.1, 1200), xlim=c(0, 120),
+plot(NA, ylim=c(0.1, 1200), xlim=c(0, 120),
      main="# spectra vs rtime", xlab="rt [min]", ylab="# of spectra")
 l <- list(ms1pm, ms2pm, ms3pm,
           round(rtime(ms2)[nl80] / 60), round(rtime(ms2)[nl97] / 60))
@@ -137,6 +138,15 @@ for (i in seq(along=l)) {
     lines(table(l[[i]]), col=col[i], type="l")
 }
 legend("top", legend=names(col), col=col, pch=20, bty="n", horiz=TRUE)
+
+#' Spectra vs rtime ylog
+#+ msnvsrtlog, fig.width=12
+plot(NA, ylim=c(1, 1100), xlim=c(0, 120), log="y",
+     main="spectra vs rtime", xlab="rt [min]", ylab="# of spectra")
+for (i in seq(along=l)) {
+    lines(table(l[[i]]), col=col[i], type="l")
+}
+legend("topleft", legend=names(col), col=col, pch=20, bty="n")
 
 #' # Compare NL trigger
 #' ms2 precursor with CID energy from MS3 filter string
@@ -181,7 +191,7 @@ uThermo <- setdiff(ms2idNL$thermo, ms2idNL$own)
 
 
 #' plotMs2 function
-plotMs2 <- function(s, xlim=range(mz(s)), ylim=range(intensity(s)), tol=0.5, topn=5) {
+plotMs2 <- function(s, xlim=range(mz(s)), ylim=c(0, max(intensity(s)) * 1.1), tol=0.5, topn=5) {
     plot(NA, xlim=xlim, ylim=ylim, xlab="m/z", ylab="intensity")
     lines(mz(s), intensity(s), type="h", col=col["MS2"])
     n <- .topN(s, topn)
@@ -197,16 +207,19 @@ plotMs2 <- function(s, xlim=range(mz(s)), ylim=range(intensity(s)), tol=0.5, top
         lines(x, y, col=nlcol, lwd=1.5, type="h")
         points(x, y, col=nlcol, pch=20)
         text(x, y, paste0(round(x, 4), "(top ", sel, ")"), pos=3, col=nlcol)
-        lg <- paste(c("precursorMz", "NL mz"),
-                    round(c(precursorMz(s), mz(s)[nt]), 4), sep=": ")
+        lg <- paste(c("rt", "precursorMz", "NL mz"),
+                    round(c(rtime(s) / 60, precursorMz(s), mz(s)[nt]), 4),
+                    sep=": ")
     } else {
         mi <- min(intensity(s)[n])
         abline(v=precursorMz(s) - nl, col=col[c("NL80", "NL97")], lty=2)
         text(precursorMz(s) - nl, max(intensity(s)), c("NL80", "NL97"),
-             pos=2, col=col[c("NL80", "NL97")])
+             pos=c(4, 2), col=col[c("NL80", "NL97")])
         abline(h=mi, col="#808080", lty=4)
         text(xlim[1], mi, paste("top", topn), col="#808080", pos=3)
-        lg <- paste("precursorMz", round(precursorMz(s), 4), sep=": ")
+        lg <- paste(c("rt", "precursorMz"),
+                    round(c(rtime(s) / 60, precursorMz(s)), 4),
+                    sep=": ")
     }
     legend("topleft", legend=lg, bty="n")
 }
