@@ -16,7 +16,6 @@ header-includes:
     \hypersetup{colorlinks,citecolor=orange,filecolor=orange,linkcolor=orange,urlcolor=orange}
     \usepackage[sfdefault]{cabin}
     \usepackage[T1]{fontenc}
-    \setbeamertemplate{caption}{\tiny\raggedright\insertcaption\par}
 ---
 
 ```{r, setup, include=FALSE}
@@ -243,7 +242,7 @@ plot(table(round(rtime(ms3) / 60)),
 ## NL trigger
 
 ### Own NL trigger
-MS2: mz of top 5 peaks - precursor mz $\approx$ 80/97 [Da]
+MS2: precursor mz - mz of top 5 peaks $\approx$ 80/97 [Da]
 
 ### Thermo NL trigger
 MS2 $\leftrightarrow$ MS3
