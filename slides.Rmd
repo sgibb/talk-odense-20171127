@@ -405,7 +405,7 @@ l <- list(common=common, own=uniqueOwn, thermo=uniqueThermo)
 i <- lapply(l, match, scanIndex(ms2))
 for (j in seq(along=l)) {
     minDelta <- apply(deltamz[i[[j]], ], 1, function(r)min(abs(r - rep(nl, each=length(r)))))
-    hist(minDelta, breaks=seq(0, 2.1, by=0.1), ylim=c(0, 675), main=names(l)[j])
+    hist(minDelta, breaks=seq(0, 2.1, by=0.1), ylim=c(0, 675), main=names(l)[j], xlab="min delta [Da]")
 }
 ```
 
